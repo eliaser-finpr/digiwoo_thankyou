@@ -36,13 +36,22 @@ if (!class_exists('Digiwoo_ThankYou')) {
             $thank_you_page = get_option('digiwoo_thankyou_page');
             
             if ($enabled === 'yes' && $thank_you_page) {
-                $redirect_url = get_permalink($thank_you_page);
+                $order = wc_get_order($order_id);
+                $order_key = $order->get_order_key();
+
+                // Construct the custom URL with order ID and order key
+                $redirect_url = add_query_arg(array(
+                    'order-received' => $order_id,
+                    'key' => $order_key,
+                ), get_permalink($thank_you_page));
+                
                 if ($redirect_url) {
                     wp_safe_redirect($redirect_url);
                     exit;
                 }
             }
         }
+
 
         public function add_settings_page($settings) {
             $settings[] = include 'settings.php';
