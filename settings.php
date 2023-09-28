@@ -13,7 +13,6 @@ class WC_Settings_Digiwoo_ThankYou extends WC_Settings_Page {
         add_filter('woocommerce_settings_tabs_array', array($this, 'add_settings_page'), 20);
         add_action('woocommerce_settings_' . $this->id, array($this, 'output'));
         add_action('woocommerce_settings_save_' . $this->id, array($this, 'save'));
-        add_shortcode('digiwoo_order_details', array($this, 'render_order_details_shortcode'));
     }
 
     public function get_settings() {
@@ -44,54 +43,6 @@ class WC_Settings_Digiwoo_ThankYou extends WC_Settings_Page {
             )
         );
         return apply_filters('wc_digiwoo_thankyou_settings', $settings);
-    }
-
-    public function render_order_details_shortcode() {
-        if (!isset($_GET['order-received']) || !isset($_GET['key'])) {
-            return 'Invalid order details.';
-        }
-
-        $order_id = intval($_GET['order-received']);
-        $order_key = sanitize_text_field($_GET['key']);
-
-        $order = wc_get_order($order_id);
-
-        $order_key = sanitize_text_field($_GET['key']);
-$show_customer_details = $order_key == $order->get_order_key() || (is_user_logged_in() && $order->get_user_id() === get_current_user_id());
-
-        if (!$order || $order->get_order_key() !== $show_customer_details) {
-            return 'Invalid order details.';
-        }
-
-        $output = "<h2>Order Details for Order #" . $order->get_id() . "</h2>";
-
-        // Displaying Billing Details
-        $output .= "<h3>Billing Details</h3>";
-        $output .= "<p>" . $order->get_formatted_billing_full_name() . "</p>";
-        $output .= "<p>" . $order->get_billing_address_1() . "</p>";
-        if ($order->get_billing_address_2()) {
-            $output .= "<p>" . $order->get_billing_address_2() . "</p>";
-        }
-        $output .= "<p>" . $order->get_billing_city() . ", " . $order->get_billing_postcode() . "</p>";
-        $output .= "<p>" . $order->get_billing_state() . ", " . $order->get_billing_country() . "</p>";
-        $output .= "<p>" . $order->get_billing_phone() . "</p>";
-        $output .= "<p>" . $order->get_billing_email() . "</p>";
-
-        // Displaying Items Purchased
-        $output .= "<h3>Items Purchased</h3>";
-        $output .= "<ul>";
-        foreach ($order->get_items() as $item_id => $item) {
-            $product = $item->get_product();
-            $output .= "<li>";
-            $output .= $product->get_name() . " x " . $item->get_quantity();
-            $output .= "</li>";
-        }
-        $output .= "</ul>";
-
-        // Displaying Total
-        $output .= "<h3>Total: " . $order->get_formatted_order_total() . "</h3>";
-
-        return $output;
     }
 
 
