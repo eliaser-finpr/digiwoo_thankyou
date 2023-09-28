@@ -56,7 +56,10 @@ class WC_Settings_Digiwoo_ThankYou extends WC_Settings_Page {
 
         $order = wc_get_order($order_id);
 
-        if (!$order || $order->get_order_key() !== $order_key) {
+        $order_key = sanitize_text_field($_GET['key']);
+$show_customer_details = $order_key == $order->get_order_key() || (is_user_logged_in() && $order->get_user_id() === get_current_user_id());
+
+        if (!$order || $order->get_order_key() !== $show_customer_details) {
             return 'Invalid order details.';
         }
 
