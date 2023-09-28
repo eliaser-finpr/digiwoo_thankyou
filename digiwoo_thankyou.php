@@ -33,6 +33,11 @@ if (!class_exists('Digiwoo_ThankYou')) {
         }
 
         public function custom_redirect($order_id) {
+            // If we're already on the custom thank you page, exit early to avoid redirection loop.
+            if (is_page(get_option('digiwoo_thankyou_page'))) {
+                return;
+            }
+            
             $enabled = get_option('digiwoo_thankyou_enabled');
             $thank_you_page = get_option('digiwoo_thankyou_page');
             
