@@ -26,7 +26,9 @@ if (!class_exists('Digiwoo_ThankYou')) {
                 return;
             }
             
-            include_once 'settings.php';
+            add_action('woocommerce_loaded', function() {
+                include_once 'settings.php';
+            });
         }
 
         public function custom_redirect($order_id) {
