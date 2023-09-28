@@ -19,6 +19,7 @@ if (!class_exists('Digiwoo_ThankYou')) {
             add_action('plugins_loaded', array($this, 'init'));
             add_action('woocommerce_thankyou', array($this, 'custom_redirect'));
             add_filter('woocommerce_get_settings_pages', array($this, 'add_settings_page'));
+            add_filter('template_include', array($this, 'use_custom_template'));
         }
 
         public function init() {
@@ -50,6 +51,23 @@ if (!class_exists('Digiwoo_ThankYou')) {
                     exit;
                 }
             }
+        }
+
+         public function use_custom_template($template) {
+            // If not viewing the specific thank you page, return the original template
+            if (!is_page('thank-you-woo')) {
+                return $template;
+            }
+
+            // Path to the custom template in your plugin folder
+            $custom_template = plugin_dir_path(__FILE__) . 'page-thank-you-woo.php';
+
+            // Check if the custom template exists, if so, return it
+            if (file_exists($custom_template)) {
+                return $custom_template;
+            }
+
+            return $template;
         }
 
 
