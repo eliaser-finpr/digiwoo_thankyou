@@ -37,13 +37,13 @@ if (!class_exists('Digiwoo_ThankYou')) {
             
             if ($enabled === 'yes' && $thank_you_page) {
                 $order = wc_get_order($order_id);
-                $order_key = $order->get_order_key();
-
-                // Construct the custom URL with order ID and order key
-                $redirect_url = add_query_arg(array(
-                    'order-received' => $order_id,
-                    'key' => $order_key,
-                ), get_permalink($thank_you_page));
+                $redirect_url = add_query_arg(
+                    array(
+                        'order-received' => $order_id,
+                        'key'            => $order->get_order_key(),
+                    ),
+                    get_permalink($thank_you_page)
+                );
                 
                 if ($redirect_url) {
                     wp_safe_redirect($redirect_url);
