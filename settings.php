@@ -42,7 +42,6 @@ class WC_Settings_Digiwoo_ThankYou extends WC_Settings_Page {
         // Display order details here. 
         // For simplicity, we're using WooCommerce's default order details template. 
         // You can customize this further as needed.
-        wc_get_template('checkout/order-receipt.php', array('order' => $order));
 
         return ob_get_clean();
     }
