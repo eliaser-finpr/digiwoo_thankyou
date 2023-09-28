@@ -15,17 +15,7 @@ class WC_Settings_Digiwoo_ThankYou extends WC_Settings_Page {
         add_action('woocommerce_settings_save_' . $this->id, array($this, 'save'));
         add_filter('query_vars', array($this, 'add_custom_query_vars'));
         add_shortcode('digiwoo_order_details', array($this, 'render_order_details_shortcode'));
-        add_action('pre_get_posts', array($this, 'prevent_404_on_custom_page'));
-    }
-
-    public function prevent_404_on_custom_page($query) {
-        if (!is_admin() && $query->is_main_query()) {
-            if (isset($_GET['order-received']) && isset($_GET['key'])) {
-                $query->is_404 = false;
-                status_header(200);
-            }
-        }
-    }   
+    }    
 
     public function add_custom_query_vars($vars) {
         $vars[] = 'order-received';
@@ -49,9 +39,9 @@ class WC_Settings_Digiwoo_ThankYou extends WC_Settings_Page {
 
         ob_start();
         
-        // Display order details here. 
-        // For simplicity, we're using WooCommerce's default order details template. 
-        // You can customize this further as needed.
+        // Display order details here using WooCommerce's default order details template.
+        wc_get_template('order/order-details.php', array('order_id' => $order_id));
+
 
         return ob_get_clean();
     }
