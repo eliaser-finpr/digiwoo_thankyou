@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Digiwoo Thank You Page Woocommerce
  * Description: Custom Thank You page for WooCommerce
- * Version: 1.0.1
+ * Version: 1.1.2
  * Author: Ardika JM-Consulting
  */
 
