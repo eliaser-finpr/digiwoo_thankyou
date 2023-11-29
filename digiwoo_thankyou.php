@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Digiwoo Thank You Page Woocommerce
  * Description: Custom Thank You page for WooCommerce
- * Version: 1.0.1
+ * Version: 1.1.2
  * Author: Ardika JM-Consulting
  */
 
@@ -33,17 +33,31 @@ if (!class_exists('Digiwoo_ThankYou')) {
         }
 
         public function custom_redirect($order_id) {
+            // If we're already on the custom thank you page, exit early to avoid redirection loop.
+            if (is_page(get_option('digiwoo_thankyou_page'))) {
+                return;
+            }
+            
             $enabled = get_option('digiwoo_thankyou_enabled');
             $thank_you_page = get_option('digiwoo_thankyou_page');
             
             if ($enabled === 'yes' && $thank_you_page) {
-                $redirect_url = get_permalink($thank_you_page);
+                $order = wc_get_order($order_id);
+                $redirect_url = add_query_arg(
+                    array(
+                        'order-received' => $order_id,
+                        'key'            => $order->get_order_key(),
+                    ),
+                    get_permalink($thank_you_page)
+                );
+                
                 if ($redirect_url) {
                     wp_safe_redirect($redirect_url);
                     exit;
                 }
             }
         }
+
 
         public function add_settings_page($settings) {
             $settings[] = include 'settings.php';

@@ -45,6 +45,7 @@ class WC_Settings_Digiwoo_ThankYou extends WC_Settings_Page {
         return apply_filters('wc_digiwoo_thankyou_settings', $settings);
     }
 
+
     private function get_pages() {
         $pages = get_pages();
         $options = array();
