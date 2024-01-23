@@ -33,10 +33,7 @@ if (!class_exists('Digiwoo_ThankYou')) {
         }
 
         public function custom_redirect($order_id) {
-            // If we're already on the custom thank you page or failed payment page, exit early to avoid redirection loop.
-            if (is_page(get_option('digiwoo_thankyou_page')) || is_page('failed-payment')) {
-                return;
-            }
+            
             
             $enabled = get_option('digiwoo_thankyou_enabled');
             $thank_you_page = get_option('digiwoo_thankyou_page');
@@ -44,6 +41,11 @@ if (!class_exists('Digiwoo_ThankYou')) {
             
             $order = wc_get_order($order_id);
             $order_status = $order->get_status();
+
+            // If we're already on the custom thank you page or failed payment page, exit early to avoid redirection loop.
+            if (is_page(get_option('digiwoo_thankyou_page')) || is_page($failed_page)) {
+                return;
+            }
 
             // Redirect to failed payment page for certain order statuses
             if (in_array($order_status, ['failed', 'cancelled', 'pending', 'on-hold'])) {
