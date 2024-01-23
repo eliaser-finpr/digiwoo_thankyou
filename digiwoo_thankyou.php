@@ -88,7 +88,6 @@ if (!class_exists('Digiwoo_ThankYou')) {
     new Digiwoo_ThankYou();
 }
 
-
 function order_status_title_shortcode() {
     // Check if the necessary query parameters are present
     if ( isset( $_GET['order-received'] ) && isset( $_GET['key'] ) ) {
