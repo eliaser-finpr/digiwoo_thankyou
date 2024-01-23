@@ -43,7 +43,7 @@ if (!class_exists('Digiwoo_ThankYou')) {
             $order_status = $order->get_status();
 
             // If we're already on the custom thank you page or failed payment page, exit early to avoid redirection loop.
-            if (is_page(get_option('digiwoo_thankyou_page')) || is_page($failed_page)) {
+            if (is_page($thank_you_page) || is_page($failed_page)) {
                 return;
             }
 
