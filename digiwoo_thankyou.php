@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Digiwoo Thank You Page Woocommerce
+ * Plugin Name: YPF Thank You Page Woocommerce
  * Description: Custom Thank You page for WooCommerce
  * Version: 1.1.3
  * Author: Ardika JM-Consulting
