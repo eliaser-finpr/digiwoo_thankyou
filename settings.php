@@ -8,7 +8,7 @@ class WC_Settings_Digiwoo_ThankYou extends WC_Settings_Page {
 
     public function __construct() {
         $this->id    = 'digiwoo_thankyou';
-        $this->label = __('Digiwoo Thank You', 'digiwoo-thankyou');
+        $this->label = __('YPF Thank You', 'digiwoo-thankyou');
 
         add_filter('woocommerce_settings_tabs_array', array($this, 'add_settings_page'), 20);
         add_action('woocommerce_settings_' . $this->id, array($this, 'output'));
@@ -18,7 +18,7 @@ class WC_Settings_Digiwoo_ThankYou extends WC_Settings_Page {
     public function get_settings() {
         $settings = array(
             'section_title' => array(
-                'name' => __('Digiwoo Thank You Settings', 'digiwoo-thankyou'),
+                'name' => __('YPF Thank You Settings', 'digiwoo-thankyou'),
                 'type' => 'title',
                 'desc' => '',
                 'id' => 'digiwoo_thankyou_section_title'
@@ -36,6 +36,13 @@ class WC_Settings_Digiwoo_ThankYou extends WC_Settings_Page {
                 'options' => $this->get_pages(),
                 'default' => '',
                 'id' => 'digiwoo_thankyou_page'
+            ),
+            'failed_page' => array(
+                'title' => __('Failed Payment Page', 'digiwoo-thankyou'),
+                'type' => 'select',
+                'options' => $this->get_pages(),
+                'default' => '',
+                'id' => 'digiwoo_failed_page'
             ),
             'section_end' => array(
                 'type' => 'sectionend',
