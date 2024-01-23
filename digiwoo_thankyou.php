@@ -32,9 +32,7 @@ if (!class_exists('Digiwoo_ThankYou')) {
 
         }
 
-        public function custom_redirect($order_id) {
-            
-            
+        public function custom_redirect($order_id) {       
             $enabled = get_option('digiwoo_thankyou_enabled');
             $thank_you_page = get_option('digiwoo_thankyou_page');
             $failed_page = get_option('digiwoo_failed_page');
