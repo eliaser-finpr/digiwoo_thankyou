@@ -2,7 +2,7 @@
 /**
  * Plugin Name: YPF Thank You Page Woocommerce
  * Description: Custom Thank You page for WooCommerce
- * Version: 1.1.3
+ * Version: 1.1.4
  * Author: Ardika JM-Consulting
  */
 
