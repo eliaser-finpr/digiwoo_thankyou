@@ -37,6 +37,13 @@ class WC_Settings_Digiwoo_ThankYou extends WC_Settings_Page {
                 'default' => '',
                 'id' => 'digiwoo_thankyou_page'
             ),
+            'failed_page' => array(
+                'title' => __('Failed Payment Page', 'digiwoo-thankyou'),
+                'type' => 'select',
+                'options' => $this->get_pages(),
+                'default' => '',
+                'id' => 'digiwoo_failed_page'
+            ),
             'section_end' => array(
                 'type' => 'sectionend',
                 'id' => 'digiwoo_thankyou_section_end'
