@@ -13,35 +13,40 @@ if (!defined('ABSPATH')) {
 
 if (!class_exists('Digiwoo_ThankYou')) {
 
-    class Digiwoo_ThankYou {
+    class Digiwoo_ThankYou
+    {
 
-        public function __construct() {
+        public function __construct()
+        {
             add_action('plugins_loaded', array($this, 'init'));
             add_action('woocommerce_thankyou', array($this, 'custom_redirect'));
             add_filter('woocommerce_get_settings_pages', array($this, 'add_settings_page'));
         }
 
-        public function init() {
+        public function init()
+        {
             if (!class_exists('WC_Payment_Gateway')) {
                 return;
             }
-            
-            add_action('woocommerce_loaded', function() {
+
+            add_action('woocommerce_loaded', function () {
                 include_once 'settings.php';
             });
 
         }
 
-        public function custom_redirect($order_id) {       
+        public function custom_redirect($order_id)
+        {
             $enabled = get_option('digiwoo_thankyou_enabled');
-            $thank_you_page = get_option('digiwoo_thankyou_page');
+            $thank_you_page_en = get_option('digiwoo_thankyou_page_en');
+            $thank_you_page_ja = get_option('digiwoo_thankyou_page_ja');
             $failed_page = get_option('digiwoo_failed_page');
-            
+
             $order = wc_get_order($order_id);
             $order_status = $order->get_status();
 
             // If we're already on the custom thank you page or failed payment page, exit early to avoid redirection loop.
-            if (is_page($thank_you_page) || is_page($failed_page)) {
+            if (is_page($thank_you_page_en) || is_page($thank_you_page_ja) || is_page($failed_page)) {
                 return;
             }
 
@@ -50,27 +55,20 @@ if (!class_exists('Digiwoo_ThankYou')) {
                 $redirect_failed_url = add_query_arg(
                     array(
                         'order-received' => $order_id,
-                        'key'            => $order->get_order_key(),
+                        'key' => $order->get_order_key(),
                     ),
                     get_permalink($failed_page)
                 );
-                
+
                 if ($redirect_failed_url) {
                     wp_safe_redirect($redirect_failed_url);
                     exit;
                 }
             }
 
-            // Redirect to custom thank you page for other cases
-            if ($enabled === 'yes' && $thank_you_page) {
-                $redirect_url = add_query_arg(
-                    array(
-                        'order-received' => $order_id,
-                        'key'            => $order->get_order_key(),
-                    ),
-                    get_permalink($thank_you_page)
-                );
-                
+            // Redirect based on language if enabled
+            if ($enabled === 'yes') {
+                $redirect_url = $this->get_pll_language_redirect_url($order_id, $order, $thank_you_page_en, $thank_you_page_ja);
                 if ($redirect_url) {
                     wp_safe_redirect($redirect_url);
                     exit;
@@ -78,8 +76,32 @@ if (!class_exists('Digiwoo_ThankYou')) {
             }
         }
 
+        private function get_pll_language_redirect_url($order_id, $order, $thank_you_page_en, $thank_you_page_ja)
+        {
+            $language = isset($_COOKIE['pll_language']) ? $_COOKIE['pll_language'] : null;
+            switch ($language) {
+                case 'en':
+                    return $this->get_redirect_url($thank_you_page_en, $order_id, $order);
+                case 'ja':
+                    return $this->get_redirect_url($thank_you_page_ja, $order_id, $order);
+                default:
+                    return null; // Default to null if language is neither 'en' nor 'ja'
+            }
+        }
 
-        public function add_settings_page($settings) {
+        private function get_redirect_url($url, $order_id, $order)
+        {
+            return add_query_arg(
+                array(
+                    'order-received' => $order_id,
+                    'key' => $order->get_order_key(),
+                ),
+                get_permalink($url)
+            );
+        }
+
+        public function add_settings_page($settings)
+        {
             $settings[] = include 'settings.php';
             return $settings;
         }
@@ -88,19 +110,20 @@ if (!class_exists('Digiwoo_ThankYou')) {
     new Digiwoo_ThankYou();
 }
 
-function order_status_title_shortcode() {
+function order_status_title_shortcode()
+{
     // Check if the necessary query parameters are present
-    if ( isset( $_GET['order-received'] ) && isset( $_GET['key'] ) ) {
-        $order_id = sanitize_text_field( $_GET['order-received'] );
-        $order_key = sanitize_text_field( $_GET['key'] );
+    if (isset($_GET['order-received']) && isset($_GET['key'])) {
+        $order_id = sanitize_text_field($_GET['order-received']);
+        $order_key = sanitize_text_field($_GET['key']);
 
         // Get the order object
-        $order = wc_get_order( $order_id );
+        $order = wc_get_order($order_id);
 
         // Check if the order exists and the order key matches
-        if ( $order && $order->get_order_key() == $order_key ) {
+        if ($order && $order->get_order_key() == $order_key) {
             // Check the order status
-            switch ( $order->get_status() ) {
+            switch ($order->get_status()) {
                 case 'completed':
                     return '<h2>Payment Status: Success</h2>';
                 case 'failed':
@@ -108,24 +131,25 @@ function order_status_title_shortcode() {
                 case 'cancelled':
                     return '<h2>Payment Status: Failed</h2>';
                 default:
-                    return '<h2>Payment Status: ' . ucfirst( $order->get_status() ) . '</h2>';
+                    return '<h2>Payment Status: ' . ucfirst($order->get_status()) . '</h2>';
             }
         }
     }
     return '<h1>Invalid Order</h1>';
 }
-add_shortcode( 'order_status_title', 'order_status_title_shortcode' );
+add_shortcode('order_status_title', 'order_status_title_shortcode');
 
-add_filter( 'body_class', 'custom_order_status_body_class' );
-function custom_order_status_body_class( $classes ) {
-    if ( is_page() && isset( $_GET['order-received'] ) && isset( $_GET['key'] ) ) {
-        $order_id = sanitize_text_field( $_GET['order-received'] );
-        $order_key = sanitize_text_field( $_GET['key'] );
+add_filter('body_class', 'custom_order_status_body_class');
+function custom_order_status_body_class($classes)
+{
+    if (is_page() && isset($_GET['order-received']) && isset($_GET['key'])) {
+        $order_id = sanitize_text_field($_GET['order-received']);
+        $order_key = sanitize_text_field($_GET['key']);
 
-        $order = wc_get_order( $order_id );
+        $order = wc_get_order($order_id);
 
-        if ( $order && $order->get_order_key() == $order_key ) {
-            switch ( $order->get_status() ) {
+        if ($order && $order->get_order_key() == $order_key) {
+            switch ($order->get_status()) {
                 case 'completed':
                     $classes[] = 'ypf-apg-order-completed';
                     break;
@@ -143,8 +167,9 @@ function custom_order_status_body_class( $classes ) {
 /**
  * Register scripts and styles for Elementor test widgets.
  */
-function digiwoo_thank_you_redirect_enqueue() {
-    wp_register_script( 'digiwoo-thank-you-js', plugins_url( '/public/assets/js/digiwoo_thankyou.js', __FILE__ ), array('jquery'), '1.0.0', true );
+function digiwoo_thank_you_redirect_enqueue()
+{
+    wp_register_script('digiwoo-thank-you-js', plugins_url('/public/assets/js/digiwoo_thankyou.js', __FILE__), array('jquery'), '1.0.0', true);
     wp_enqueue_script('digiwoo-thank-you-js');
 }
-add_action( 'wp_enqueue_scripts', 'digiwoo_thank_you_redirect_enqueue');
+add_action('wp_enqueue_scripts', 'digiwoo_thank_you_redirect_enqueue');

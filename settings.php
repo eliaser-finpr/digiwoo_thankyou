@@ -4,10 +4,12 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class WC_Settings_Digiwoo_ThankYou extends WC_Settings_Page {
+class WC_Settings_Digiwoo_ThankYou extends WC_Settings_Page
+{
 
-    public function __construct() {
-        $this->id    = 'digiwoo_thankyou';
+    public function __construct()
+    {
+        $this->id = 'digiwoo_thankyou';
         $this->label = __('YPF Thank You', 'digiwoo-thankyou');
 
         add_filter('woocommerce_settings_tabs_array', array($this, 'add_settings_page'), 20);
@@ -15,7 +17,8 @@ class WC_Settings_Digiwoo_ThankYou extends WC_Settings_Page {
         add_action('woocommerce_settings_save_' . $this->id, array($this, 'save'));
     }
 
-    public function get_settings() {
+    public function get_settings()
+    {
         $settings = array(
             'section_title' => array(
                 'name' => __('YPF Thank You Settings', 'digiwoo-thankyou'),
@@ -30,12 +33,19 @@ class WC_Settings_Digiwoo_ThankYou extends WC_Settings_Page {
                 'default' => 'no',
                 'id' => 'digiwoo_thankyou_enabled'
             ),
-            'thank_you_page' => array(
-                'title' => __('Thank You Page', 'digiwoo-thankyou'),
+            'thank_you_page_en' => array(
+                'title' => __('Thank You Page - English', 'digiwoo-thankyou-en'),
                 'type' => 'select',
                 'options' => $this->get_pages(),
                 'default' => '',
-                'id' => 'digiwoo_thankyou_page'
+                'id' => 'digiwoo_thankyou_page_en'
+            ),
+            'thank_you_page_ja' => array(
+                'title' => __('Thank You Page - Japanese', 'digiwoo-thankyou-ja'),
+                'type' => 'select',
+                'options' => $this->get_pages(),
+                'default' => '',
+                'id' => 'digiwoo_thankyou_page_ja'
             ),
             'failed_page' => array(
                 'title' => __('Failed Payment Page', 'digiwoo-thankyou'),
@@ -53,7 +63,8 @@ class WC_Settings_Digiwoo_ThankYou extends WC_Settings_Page {
     }
 
 
-    private function get_pages() {
+    private function get_pages()
+    {
         $pages = get_pages();
         $options = array();
         if ($pages) {
@@ -66,4 +77,3 @@ class WC_Settings_Digiwoo_ThankYou extends WC_Settings_Page {
 }
 
 return new WC_Settings_Digiwoo_ThankYou();
-    
