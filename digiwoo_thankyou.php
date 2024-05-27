@@ -85,7 +85,7 @@ if (!class_exists('Digiwoo_ThankYou')) {
                 case 'ja':
                     return $this->get_redirect_url($thank_you_page_ja, $order_id, $order);
                 default:
-                    return null; // Default to null if language is neither 'en' nor 'ja'
+                    return $this->get_redirect_url($thank_you_page_en, $order_id, $order);
             }
         }
 
