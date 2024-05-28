@@ -33,19 +33,33 @@ class WC_Settings_Digiwoo_ThankYou extends WC_Settings_Page
                 'default' => 'no',
                 'id' => 'digiwoo_thankyou_enabled'
             ),
-            'thank_you_page_en' => array(
-                'title' => __('Thank You Page - English', 'digiwoo-thankyou-en'),
+            'thank_you_page_challenge_en' => array(
+                'title' => __('Thank You Page - Challenge - English', 'digiwoo-thankyou-challenge-en'),
                 'type' => 'select',
                 'options' => $this->get_pages(),
                 'default' => '',
-                'id' => 'digiwoo_thankyou_page_en'
+                'id' => 'digiwoo_thankyou_page_challenge_en'
             ),
-            'thank_you_page_ja' => array(
-                'title' => __('Thank You Page - Japanese', 'digiwoo-thankyou-ja'),
+            'thank_you_page_free_trial_en' => array(
+                'title' => __('Thank You Page - Free Trial - English', 'digiwoo-thankyou-free-trial-en'),
                 'type' => 'select',
                 'options' => $this->get_pages(),
                 'default' => '',
-                'id' => 'digiwoo_thankyou_page_ja'
+                'id' => 'digiwoo_thankyou_page_free_trial_en'
+            ),
+            'thank_you_page_challenge_ja' => array(
+                'title' => __('Thank You Page - Challenge - English', 'digiwoo-thankyou-challenge-ja'),
+                'type' => 'select',
+                'options' => $this->get_pages(),
+                'default' => '',
+                'id' => 'digiwoo_thankyou_page_challenge_ja'
+            ),
+            'thank_you_page_free_trial_ja' => array(
+                'title' => __('Thank You Page - Free Trial - English', 'digiwoo-thankyou-free-trial-ja'),
+                'type' => 'select',
+                'options' => $this->get_pages(),
+                'default' => '',
+                'id' => 'digiwoo_thankyou_page_free_trial_ja'
             ),
             'failed_page' => array(
                 'title' => __('Failed Payment Page', 'digiwoo-thankyou'),

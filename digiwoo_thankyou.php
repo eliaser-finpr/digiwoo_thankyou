@@ -38,15 +38,17 @@ if (!class_exists('Digiwoo_ThankYou')) {
         public function custom_redirect($order_id)
         {
             $enabled = get_option('digiwoo_thankyou_enabled');
-            $thank_you_page_en = get_option('digiwoo_thankyou_page_en');
-            $thank_you_page_ja = get_option('digiwoo_thankyou_page_ja');
+            $digiwoo_thankyou_page_challenge_en = get_option('digiwoo_thankyou_page_challenge_en');
+            $digiwoo_thankyou_page_free_trial_en = get_option('digiwoo_thankyou_page_free_trial_en');
+            $digiwoo_thankyou_page_challenge_ja = get_option('digiwoo_thankyou_page_challenge_ja');
+            $digiwoo_thankyou_page_free_trial_ja = get_option('digiwoo_thankyou_page_free_trial_ja');
             $failed_page = get_option('digiwoo_failed_page');
 
             $order = wc_get_order($order_id);
             $order_status = $order->get_status();
 
             // If we're already on the custom thank you page or failed payment page, exit early to avoid redirection loop.
-            if (is_page($thank_you_page_en) || is_page($thank_you_page_ja) || is_page($failed_page)) {
+            if (is_page($digiwoo_thankyou_page_challenge_en) || is_page($digiwoo_thankyou_page_free_trial_en) || is_page($digiwoo_thankyou_page_challenge_ja) || is_page($digiwoo_thankyou_page_free_trial_ja) || is_page($failed_page)) {
                 return;
             }
 
@@ -68,7 +70,7 @@ if (!class_exists('Digiwoo_ThankYou')) {
 
             // Redirect based on language if enabled
             if ($enabled === 'yes') {
-                $redirect_url = $this->get_pll_language_redirect_url($order_id, $order, $thank_you_page_en, $thank_you_page_ja);
+                $redirect_url = $this->get_pll_language_redirect_url($order_id, $order, $digiwoo_thankyou_page_challenge_en, $digiwoo_thankyou_page_free_trial_en, $digiwoo_thankyou_page_challenge_ja, $digiwoo_thankyou_page_free_trial_ja);
                 if ($redirect_url) {
                     wp_safe_redirect($redirect_url);
                     exit;
@@ -76,16 +78,36 @@ if (!class_exists('Digiwoo_ThankYou')) {
             }
         }
 
-        private function get_pll_language_redirect_url($order_id, $order, $thank_you_page_en, $thank_you_page_ja)
+        private function get_pll_language_redirect_url($order_id, $order, $digiwoo_thankyou_page_challenge_en, $digiwoo_thankyou_page_free_trial_en, $digiwoo_thankyou_page_challenge_ja, $digiwoo_thankyou_page_free_trial_ja)
         {
             $language = isset($_COOKIE['pll_language']) ? $_COOKIE['pll_language'] : null;
+            $billing_cat_product = strtolower(str_replace(" ", "", $_POST['billing_cat_product']));
             switch ($language) {
                 case 'en':
-                    return $this->get_redirect_url($thank_you_page_en, $order_id, $order);
+                    if (!empty($billing_cat_product)) {
+                        if ($billing_cat_product === 'challenge') {
+                            return $this->get_redirect_url($digiwoo_thankyou_page_challenge_en, $order_id, $order);
+                        }
+                        if ($billing_cat_product === 'free-trial') {
+                            return $this->get_redirect_url($digiwoo_thankyou_page_free_trial_en, $order_id, $order);
+                        }
+                    }
                 case 'ja':
-                    return $this->get_redirect_url($thank_you_page_ja, $order_id, $order);
+                    if (!empty($billing_cat_product)) {
+                        if ($billing_cat_product === 'challenge') {
+                            return $this->get_redirect_url($digiwoo_thankyou_page_challenge_ja, $order_id, $order);
+                        }
+                        if ($billing_cat_product === 'free-trial') {
+                            return $this->get_redirect_url($digiwoo_thankyou_page_free_trial_ja, $order_id, $order);
+                        }
+                    }
                 default:
-                    return $this->get_redirect_url($thank_you_page_en, $order_id, $order);
+                    if ($billing_cat_product === 'challenge') {
+                        return $this->get_redirect_url($digiwoo_thankyou_page_challenge_en, $order_id, $order);
+                    }
+                    if ($billing_cat_product === 'free-trial') {
+                        return $this->get_redirect_url($digiwoo_thankyou_page_free_trial_en, $order_id, $order);
+                    }
             }
         }
 
