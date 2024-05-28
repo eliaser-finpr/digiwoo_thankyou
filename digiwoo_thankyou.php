@@ -102,12 +102,7 @@ if (!class_exists('Digiwoo_ThankYou')) {
                         }
                     }
                 default:
-                    if ($billing_cat_product === 'challenge') {
-                        return $this->get_redirect_url($digiwoo_thankyou_page_challenge_en, $order_id, $order);
-                    }
-                    if ($billing_cat_product === 'free-trial') {
-                        return $this->get_redirect_url($digiwoo_thankyou_page_free_trial_en, $order_id, $order);
-                    }
+                    return $this->get_redirect_url($digiwoo_thankyou_page_challenge_en, $order_id, $order);
             }
         }
 
