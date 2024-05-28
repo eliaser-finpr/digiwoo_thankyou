@@ -70,7 +70,6 @@ if (!class_exists('Digiwoo_ThankYou')) {
 
             // Redirect based on language if enabled
             if ($enabled === 'yes') {
-                setcookie('before_redirect', 'true', time() + (30 * 24 * 3600), '/');
                 $redirect_url = $this->get_pll_language_redirect_url($order_id, $order, $digiwoo_thankyou_page_challenge_en, $digiwoo_thankyou_page_free_trial_en, $digiwoo_thankyou_page_challenge_ja, $digiwoo_thankyou_page_free_trial_ja);
                 if ($redirect_url) {
                     wp_safe_redirect($redirect_url);
@@ -85,11 +84,6 @@ if (!class_exists('Digiwoo_ThankYou')) {
             $language = isset($_COOKIE['pll_language']) ? $_COOKIE['pll_language'] : 'en'; // Default to English if language cookie not set
             // Get the billing_cat_product from order meta
             $billing_cat_product = get_post_meta($order_id, 'billing_cat_product', true);
-
-            // Set cookies for billing_cat_product and language
-            setcookie('billing_cat_product', $billing_cat_product, time() + (30 * 24 * 3600), '/');
-            setcookie('billing_pll_language', $language, time() + (30 * 24 * 3600), '/');
-
             // Determine the redirect URL based on language and billing_cat_product
             switch ($language) {
                 case 'en':
