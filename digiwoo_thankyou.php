@@ -87,39 +87,13 @@ if (!class_exists('Digiwoo_ThankYou')) {
 
             switch ($language) {
                 case 'en':
-                    if (!empty($billing_cat_product)) {
-                        if ($billing_cat_product === 'challenge') {
-                            return $this->get_redirect_url($digiwoo_thankyou_page_challenge_en, $order_id, $order);
-                        }
-                        if ($billing_cat_product === 'free-trial') {
-                            return $this->get_redirect_url($digiwoo_thankyou_page_free_trial_en, $order_id, $order);
-                        }
-                    }
-                    break;
+                    return $this->get_redirect_url($digiwoo_thankyou_page_challenge_en, $order_id, $order);
                 case 'ja':
-                    if (!empty($billing_cat_product)) {
-                        if ($billing_cat_product === 'challenge') {
-                            return $this->get_redirect_url($digiwoo_thankyou_page_challenge_ja, $order_id, $order);
-                        }
-                        if ($billing_cat_product === 'free-trial') {
-                            return $this->get_redirect_url($digiwoo_thankyou_page_free_trial_ja, $order_id, $order);
-                        }
-                    }
-                    break;
+                    return $this->get_redirect_url($digiwoo_thankyou_page_challenge_ja, $order_id, $order);
                 default:
-                    if (!empty($billing_cat_product)) {
-                        if ($billing_cat_product === 'challenge') {
-                            return $this->get_redirect_url($digiwoo_thankyou_page_challenge_ja, $order_id, $order);
-                        }
-                        if ($billing_cat_product === 'free-trial') {
-                            return $this->get_redirect_url($digiwoo_thankyou_page_free_trial_ja, $order_id, $order);
-                        }
-                    }
-                    break;
+                    return $this->get_redirect_url($digiwoo_thankyou_page_challenge_ja, $order_id, $order);
             }
 
-            // Return default URL or handle any other cases here
-            return $this->get_redirect_url($digiwoo_thankyou_page_challenge_en, $order_id, $order);
         }
 
         private function get_redirect_url($url, $order_id, $order)
