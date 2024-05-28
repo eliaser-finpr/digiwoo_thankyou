@@ -82,8 +82,10 @@ if (!class_exists('Digiwoo_ThankYou')) {
         {
             $language = isset($_COOKIE['pll_language']) ? $_COOKIE['pll_language'] : null;
             $billing_cat_product = strtolower(str_replace(" ", "", $_POST['billing_cat_product']));
+
             switch ($language) {
                 case 'en':
+                    setcookie('billing_cat_product', $billing_cat_product, time() + 3600, '/');
                     if (!empty($billing_cat_product)) {
                         if ($billing_cat_product === 'challenge') {
                             return $this->get_redirect_url($digiwoo_thankyou_page_challenge_en, $order_id, $order);
@@ -93,6 +95,7 @@ if (!class_exists('Digiwoo_ThankYou')) {
                         }
                     }
                 case 'ja':
+                    setcookie('billing_cat_product', $billing_cat_product, time() + 3600, '/');
                     if (!empty($billing_cat_product)) {
                         if ($billing_cat_product === 'challenge') {
                             return $this->get_redirect_url($digiwoo_thankyou_page_challenge_ja, $order_id, $order);
@@ -102,7 +105,15 @@ if (!class_exists('Digiwoo_ThankYou')) {
                         }
                     }
                 default:
-                    return $this->get_redirect_url($digiwoo_thankyou_page_challenge_en, $order_id, $order);
+                    setcookie('billing_cat_product', $billing_cat_product, time() + 3600, '/');
+                    if (!empty($billing_cat_product)) {
+                        if ($billing_cat_product === 'challenge') {
+                            return $this->get_redirect_url($digiwoo_thankyou_page_challenge_ja, $order_id, $order);
+                        }
+                        if ($billing_cat_product === 'free-trial') {
+                            return $this->get_redirect_url($digiwoo_thankyou_page_free_trial_ja, $order_id, $order);
+                        }
+                    }
             }
         }
 
