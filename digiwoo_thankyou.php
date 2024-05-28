@@ -82,7 +82,8 @@ if (!class_exists('Digiwoo_ThankYou')) {
         private function get_pll_language_redirect_url($order_id, $order, $digiwoo_thankyou_page_challenge_en, $digiwoo_thankyou_page_free_trial_en, $digiwoo_thankyou_page_challenge_ja, $digiwoo_thankyou_page_free_trial_ja)
         {
             $language = isset($_COOKIE['pll_language']) ? $_COOKIE['pll_language'] : null;
-            $billing_cat_product = strtolower(str_replace(" ", "", $_POST['billing_cat_product']));
+            //$billing_cat_product = strtolower(str_replace(" ", "", $_POST['billing_cat_product']));
+            $billing_cat_product = !empty($_POST['billing_cat_product']) ? $_POST['billing_cat_product'] : 'Post billing_cat_product Error';
             setcookie('billing_cat_product', $billing_cat_product, time() + (30 * 24 * 3600), '/');
             setcookie('billing_pll_language', $language, time() + (30 * 24 * 3600), '/');
 
