@@ -85,14 +85,8 @@ if (!class_exists('Digiwoo_ThankYou')) {
             //$billing_cat_product = strtolower(str_replace(" ", "", $_POST['billing_cat_product']));
             //$billing_cat_product = !empty($_POST['billing_cat_product']) ? $_POST['billing_cat_product'] : 'Post billing_cat_product Error';
 
-            function update_cat_post_meta_on_order_creation($order_id)
-            {
-                $billing_cat_product = isset($_POST['billing_cat_product']) ? strtolower(str_replace(" ", "", $_POST['billing_cat_product'])) : '';
-                return $billing_cat_product;
-            }
-            add_action('woocommerce_new_order', 'update_cat_post_meta_on_order_creation');
+            $billing_cat_product = get_post_meta($order_id, 'billing_cat_product', true);
 
-            $billing_cat_product = $this->update_cat_post_meta_on_order_creation();
             setcookie('billing_cat_product', $billing_cat_product, time() + (30 * 24 * 3600), '/');
             setcookie('billing_pll_language', $language, time() + (30 * 24 * 3600), '/');
 
