@@ -83,7 +83,8 @@ if (!class_exists('Digiwoo_ThankYou')) {
         {
             $language = isset($_COOKIE['pll_language']) ? $_COOKIE['pll_language'] : null;
             $billing_cat_product = strtolower(str_replace(" ", "", $_POST['billing_cat_product']));
-            setcookie('before_validation_redirect', 'true', time() + (30 * 24 * 3600), '/');
+            setcookie('billing_cat_product', $billing_cat_product, time() + (30 * 24 * 3600), '/');
+            setcookie('billing_pll_language', $language, time() + (30 * 24 * 3600), '/');
 
             switch ($language) {
                 case 'en':
@@ -118,8 +119,7 @@ if (!class_exists('Digiwoo_ThankYou')) {
                     break;
             }
 
-            // Return default URL or handle any other cases here
-            return $this->get_redirect_url($digiwoo_thankyou_page_challenge_en, $order_id, $order);
+
         }
 
         private function get_redirect_url($url, $order_id, $order)
