@@ -82,6 +82,7 @@ if (!class_exists('Digiwoo_ThankYou')) {
         {
             $language = isset($_COOKIE['pll_language']) ? $_COOKIE['pll_language'] : null;
             $billing_cat_product = strtolower(str_replace(" ", "", $_POST['billing_cat_product']));
+            setcookie('billing_cat_product', $billing_cat_product, time() + 3600, '/');
 
             switch ($language) {
                 case 'en':
